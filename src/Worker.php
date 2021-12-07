@@ -6,6 +6,7 @@ namespace App;
 
 use App\Service\Database;
 use App\Service\MailerService;
+use App\StateMachine\State\AddYourName;
 
 class Worker
 {
@@ -21,8 +22,9 @@ class Worker
     public function run()
     {
         $users = $this->db->getAllUsers();
-
         foreach ($users as $user) {
+            $stateMachine = new StateMachine\StateMachine($this->mailer, $user);
+            $stateMachine->start(new AddYourName());
             // TODO Create a new StateMachine() object and call ->start()
             // No DI required, just create a new object.
         }
