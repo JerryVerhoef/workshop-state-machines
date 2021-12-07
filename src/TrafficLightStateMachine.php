@@ -15,7 +15,17 @@ class TrafficLightStateMachine
      */
     public function can(string $transition): bool
     {
-        // TODO write me
+        switch($transition) {
+            case 'to_yellow':
+                return $this->state === 'green' || $this->state === 'red';
+            case 'to_pre_red':
+                return $this->state === 'green';
+            case 'to_red':
+                return $this->state === 'pre_red';
+            case 'to_green':
+                return $this->state === 'yellow';
+        }
+        return false;
     }
 
     /**
@@ -25,6 +35,9 @@ class TrafficLightStateMachine
      */
     public function apply(string $transition): void
     {
-        // TODO write me
+        if (!$this->can($transition)) {
+            throw new \InvalidArgumentException('Invalid newstate: '. $transition . ' current state: '. $this->state);
+        }
+        $this->state = substr($transition, 3);
     }
 }
