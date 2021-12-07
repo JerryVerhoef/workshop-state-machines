@@ -27,4 +27,15 @@ final class StateMachine
 
         $state->setState($this->rules[$state->getState()][$transition]);
     }
+
+    public function getCurrentState(StateInterface $param): string
+    {
+        return $param->getState();
+    }
+
+    public function getValidTransitions(StateInterface $param): array
+    {
+        return array_keys($this->rules[$param->getState()]);
+    }
+
 }

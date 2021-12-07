@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\App;
 
-use App\Entity\TrafficLight;
+use App\TrafficLight;
 use App\StateMachine;
 use Nyholm\NSA;
 use PHPUnit\Framework\TestCase;
