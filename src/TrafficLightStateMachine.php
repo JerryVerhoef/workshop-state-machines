@@ -13,9 +13,9 @@ class TrafficLightStateMachine
      * Check if we are allowed to apply $state right now. Ie, is there an transition
      * from $this->state to $state?
      */
-    public function can(string $transition): bool
+    public function can(StateInterface $light, string $transition): bool
     {
-        switch ($this->state) {
+        switch ($light->getState()) {
             case 'green':
                 return ($transition === 'to_yellow');
             case 'yellow':
@@ -32,25 +32,28 @@ class TrafficLightStateMachine
      *
      * @throws \InvalidArgumentException if the $newState is invalid.
      */
-    public function apply(string $transition): void
+    public function apply(StateInterface $light, string $transition): void
     {
-        if (!$this->can($transition)) {
+        if (!$this->can($light, $transition)) {
             throw new \InvalidArgumentException('Invalid transition');
         }
 
-        switch ($this->state) {
+        switch ($light->getState()) {
             case 'green' && ($transition === 'to_yellow'):
-                $this->state = 'yellow';
+                $newState = 'yellow';
                 break;
             case 'yellow' && ($transition === 'to_green'):
-                $this->state = 'green';
+                $newState = 'green';
                 break;
             case 'yellow' && ($transition === 'to_red'):
-                $this->state = 'red';
+                $newState = 'red';
                 break;
             case 'red' && ($transition === 'to_yellow'):
-                $this->state = 'yellow';
+                $newState = 'yellow';
                 break;
+            default:
+                $newState = $light->getState();
         }
+        $light->setState($newState);
     }
 }
